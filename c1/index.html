@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="cs"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>C1 Advanced trénink</title>
+<meta name="description" content="Procvičování na Cambridge C1 Advanced: Writing, Use of English, Reading, Listening, Speaking a slovíčka C1/C2.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Same game-HUD look as the vectors page (dark, XP bar). Exam texts sit on a light "paper" panel in a serif face, like the real question booklet. Single dark theme on purpose. */
+:root{--bg:#0d1320;--panel:#141d2e;--panel2:#0f1726;--edge:#2a3954;--txt:#eaf0ff;--mut:#8f9dbb;--acc:#46d5ff;--g:#ffd24a;--ok:#5ef08a;--r:#ff4d6d;--p:#b98cff;--paper:#f3eee3;--ink:#1f2633;--inkm:#5b6170;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--txt);font:17px/1.55 'Space Grotesk',system-ui,sans-serif;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.wrap{max-width:960px;margin:0 auto;padding-block:20px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+h1{font-size:clamp(30px,6vw,46px);margin:0;line-height:1.05;text-wrap:balance}
+h2{font-size:clamp(22px,4vw,28px);margin:0 0 4px;line-height:1.2}
+h3{font-size:19px;margin:0 0 8px}
+p{margin:0}
+.acc{color:var(--acc)}.g{color:var(--g)}.ok{color:var(--ok)}.r{color:var(--r)}
+.sub{color:var(--mut)}
+.mono{font-family:'JetBrains Mono',monospace}
+.titlerow{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.count{font:800 14px 'JetBrains Mono',monospace;background:#ff4d6d1f;border:2px solid var(--r);color:#ffc2cd;border-radius:999px;padding:4px 12px}
+.top{display:flex;flex-direction:column;gap:10px}
+.xpbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.lvl{font:800 14px 'JetBrains Mono',monospace;background:var(--g);color:var(--bg);border-radius:8px;padding:3px 9px}
+.xp{flex:1 1 200px;height:12px;background:#0a0f19;border-radius:6px;overflow:hidden}
+.xp>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ok),var(--acc));transition:width .4s}
+.stat{font:800 14px 'JetBrains Mono',monospace;color:var(--mut)}
+@media (prefers-reduced-motion:reduce){.xp>i{transition:none}}
+
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:6px;overflow-x:auto;padding:8px 2px;background:var(--bg);scrollbar-width:none;border-bottom:2px solid var(--edge)}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:0 0 auto;border-radius:999px;padding:6px 14px;min-height:40px}
+.tabs button[aria-selected=true]{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.tabs .star,.star{color:var(--g)}
+.tabs button[aria-selected=true] .star{color:var(--bg)}
+
+.card{background:var(--panel);border:2px solid var(--edge);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card.intro{background:linear-gradient(135deg,#16223a,#141d2e)}
+.stack{display:flex;flex-direction:column;gap:14px}
+.area{display:flex;flex-direction:column;gap:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+button{font:700 15px 'Space Grotesk',sans-serif;color:var(--txt);background:#1b2740;border:2px solid var(--edge);border-radius:10px;padding:8px 14px;cursor:pointer;min-height:44px}
+button:hover:not(:disabled){border-color:var(--mut)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+button:disabled{cursor:default;opacity:.85}
+button.on{background:var(--g);color:var(--bg);border-color:var(--g)}
+button.main{background:var(--ok);color:var(--bg);border-color:var(--ok)}
+button.sm{min-height:36px;padding:4px 10px;font-size:14px}
+.row-b{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.hint{color:var(--mut);font-size:15px}
+.ptag{display:inline-block;font:800 13px 'JetBrains Mono',monospace;color:var(--acc);letter-spacing:.06em;text-transform:uppercase}
+.rhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px}
+details summary{cursor:pointer;color:var(--mut);font-weight:700}
+details[open]>summary{margin-bottom:10px}
+select{font:700 15px 'Space Grotesk',sans-serif;color:var(--txt);background:#0b1120;border:2px solid var(--edge);border-radius:10px;padding:8px 10px;min-height:44px;max-width:100%}
+label.lbl{display:flex;flex-direction:column;gap:6px;font-weight:700;color:var(--mut);min-width:0}
+
+/* exam paper */
+.paper{background:var(--paper);color:var(--ink);font:18px/1.65 'Source Serif 4',Georgia,serif;border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;min-width:0;overflow-wrap:break-word}
+.paper h3,.paper h4{font-family:'Space Grotesk',sans-serif;color:var(--ink);margin:0}
+.paper h4{font-size:16px;margin-top:4px}
+.paper .lab{font:700 13px 'Space Grotesk',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--inkm)}
+.paper ul{margin:0;padding-left:22px}
+.q{font:500 19px/1.7 'Source Serif 4',Georgia,serif;overflow-wrap:break-word}
+.gap{display:inline-block;min-width:5em;border-bottom:2px solid var(--acc);color:var(--acc);text-align:center}
+.gapin{font:600 18px 'Source Serif 4',Georgia,serif;width:9em;max-width:60%;background:#0b1120;color:var(--txt);border:2px solid var(--acc);border-radius:8px;padding:2px 8px;vertical-align:baseline}
+input.wide{width:100%;font:600 19px 'Source Serif 4',Georgia,serif;background:#0b1120;color:var(--txt);border:2px solid var(--acc);border-radius:10px;padding:10px 12px;min-height:48px}
+.kw,.stem{display:inline-block;font:800 16px 'JetBrains Mono',monospace;border-radius:6px;padding:2px 10px;letter-spacing:.05em}
+.kw{background:var(--g);color:var(--bg)}.stem{background:var(--acc);color:var(--bg)}
+.opts{display:grid;gap:8px}
+.opts.short{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}
+.opt{text-align:left;display:flex;gap:10px;align-items:baseline;font-weight:500;font-size:16px}
+.opt b{font-family:'JetBrains Mono',monospace;color:var(--acc)}
+.opt.on{border-color:var(--acc);background:#46d5ff1c}
+.opt.right{border-color:var(--ok);background:#5ef08a22}
+.opt.bad{border-color:var(--r);background:#ff4d6d22}
+.fb{border-radius:12px;padding:12px 14px;display:none;flex-direction:column;gap:8px}
+.fb.ok{display:flex;background:#5ef08a14;border:2px solid var(--ok)}
+.fb.no{display:flex;background:#ff4d6d14;border:2px solid var(--r)}
+.fb.info{display:flex;background:#46d5ff12;border:2px solid var(--acc)}
+.fb .ans{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:18px}
+.note{color:var(--mut);font-size:15px}
+ol.qs{margin:0;padding-left:26px;display:flex;flex-direction:column;gap:16px}
+ol.qs li>p{margin-bottom:8px;font-weight:700}
+.why{display:none;color:var(--mut);font-size:15px;margin-top:6px}
+.why.show{display:block}
+.why.okc{color:var(--ok)}.why.noc{color:#ff9aac}
+.slot{border:2px dashed #b9b2a3;border-radius:10px;padding:8px 10px;font-family:'Space Grotesk',sans-serif;display:flex;flex-direction:column;gap:6px}
+.slot select{background:#fff;color:var(--ink);border-color:#b9b2a3}
+.slot .prev{font:italic 17px/1.6 'Source Serif 4',Georgia,serif;color:var(--inkm)}
+.slot.right{border-color:#16a34a;border-style:solid}.slot.bad{border-color:#dc2626;border-style:solid}
+.slot .why{color:var(--inkm)}
+.optlist{display:flex;flex-direction:column;gap:8px}
+.optlist .paper{font-size:17px;padding:12px 16px}
+
+/* overview */
+.paperh{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline}
+.pmeta{font:800 13px 'JetBrains Mono',monospace;color:var(--g)}
+.parts{display:flex;flex-direction:column;gap:8px}
+.prow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:start;background:var(--panel2);border-radius:12px;padding:10px 12px}
+.pnum{font:800 15px 'JetBrains Mono',monospace;background:#1b2740;border-radius:8px;padding:4px 8px;color:var(--acc)}
+.prow .t{font-weight:700}
+.prow .m{font:700 13px 'JetBrains Mono',monospace;color:var(--mut)}
+.prow .tip{grid-column:2/4;color:var(--mut);font-size:15px}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr) 5.5em;gap:10px;align-items:center;font-size:15px}
+.bar .b{height:10px;background:#0a0f19;border-radius:5px;overflow:hidden}
+.bar .b i{display:block;height:100%}
+.bar .v{font:800 13px 'JetBrains Mono',monospace;color:var(--mut);text-align:right}
+.plan{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.plan li{background:var(--panel2);border-radius:10px;padding:10px 12px}
+.plan li b{color:var(--g)}
+.grades{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;font-size:15px}
+.grades b{font-family:'JetBrains Mono',monospace}
+
+/* writing */
+textarea{width:100%;min-height:360px;font:18px/1.6 'Source Serif 4',Georgia,serif;background:var(--paper);color:var(--ink);border-radius:12px;border:2px solid var(--edge);padding:14px 16px;resize:vertical}
+.wtools{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between}
+.wc{font:800 16px 'JetBrains Mono',monospace}
+.wc.okc{color:var(--ok)}.wc.warnc{color:var(--g)}.wc.badc{color:var(--r)}
+.timer{display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap}
+.timer .tl{color:var(--mut);font-weight:700;font-size:14px}
+.timer .tm{font:800 24px 'JetBrains Mono',monospace;min-width:4.2ch}
+.timer.low .tm{color:var(--g)}.timer.end .tm{color:var(--r)}
+.res{display:flex;flex-direction:column;gap:8px}
+.res .rr{padding:9px 12px;border-radius:10px;border-left:5px solid;font-size:15px;overflow-wrap:anywhere}
+.rr.okr{border-color:var(--ok);background:#5ef08a10}.rr.warnr{border-color:var(--g);background:#ffd24a10}.rr.badr{border-color:var(--r);background:#ff4d6d10}
+.rr b{font-family:'JetBrains Mono',monospace}
+.hl-l{background:#bfe9f5;border-radius:3px;box-shadow:0 0 0 1px #bfe9f5}
+.hl-a{background:#bdeccb;border-radius:3px;box-shadow:0 0 0 1px #bdeccb}
+.hl-w{background:#f8e3a0;border-radius:3px}
+.hl-c{background:#f9c9cf;text-decoration:underline wavy #c81e3a;text-underline-offset:3px;border-radius:3px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:14px;color:var(--mut)}
+.legend span{color:var(--ink);padding:0 6px;border-radius:4px}
+.checks{display:flex;flex-direction:column;gap:6px}
+.checks label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.checks input{width:22px;height:22px;flex:0 0 auto;margin-top:2px;accent-color:var(--ok)}
+.phr{display:flex;flex-wrap:wrap;gap:6px}
+.phr span{background:var(--panel2);border:1px solid var(--edge);border-radius:8px;padding:4px 10px;font:500 15px 'Source Serif 4',Georgia,serif}
+.genres{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.genre{background:var(--panel2);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.genre h3{margin:0;color:var(--acc)}
+.genre ol{margin:0;padding-left:20px;font-size:15px}
+.crit{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.crit div{background:var(--panel2);border-radius:12px;padding:12px 14px;font-size:15px}
+.crit b{display:block;color:var(--g);font-size:16px;margin-bottom:4px}
+
+/* speaking */
+.pics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:640px){.pics{grid-template-columns:1fr}}
+.pic{background:var(--paper);color:var(--ink);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center;font:16px/1.45 'Source Serif 4',Georgia,serif}
+.pic .em{font-size:44px;line-height:1.1}
+.pic b{font-family:'JetBrains Mono',monospace}
+.spider{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center}
+.spider .c{grid-column:2;grid-row:2;background:var(--paper);color:var(--ink);border-radius:14px;padding:14px;text-align:center;font:600 18px/1.4 'Source Serif 4',Georgia,serif}
+.spider .s{background:var(--panel2);border:2px solid var(--edge);border-radius:12px;padding:10px;text-align:center;font-weight:700}
+@media (min-width:641px){.spider .s:nth-child(2){grid-area:1/1}.spider .s:nth-child(3){grid-area:1/3}.spider .s:nth-child(4){grid-area:2/1}.spider .s:nth-child(5){grid-area:2/3}.spider .s:nth-child(6){grid-area:3/2}}
+@media (max-width:640px){.spider{grid-template-columns:1fr 1fr}.spider .c{grid-column:1/3;grid-row:1}}
+.bigq{font:600 21px/1.5 'Source Serif 4',Georgia,serif}
+audio{width:100%}
+
+/* vocab */
+.flash{background:var(--paper);color:var(--ink);border-radius:16px;padding:26px 20px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;min-height:200px;justify-content:center}
+.flash .w{font:600 32px 'Source Serif 4',Georgia,serif}
+.flash .d{font-size:17px}
+.flash .e{font:italic 18px 'Source Serif 4',Georgia,serif;color:var(--inkm)}
+.lv{font:800 12px 'JetBrains Mono',monospace;border-radius:6px;padding:2px 7px;background:#1b2740;color:var(--acc)}
+.lv.c2{color:var(--p)}
+.vlist{display:flex;flex-direction:column;gap:6px}
+.vrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 12px;background:var(--panel2);border-radius:10px;padding:8px 12px;font-size:15px}
+.vrow .ex{grid-column:1/3;color:var(--mut);font-style:italic}
+@media (max-width:520px){.bar{grid-template-columns:minmax(0,1fr) 4.5em}.bar .b{grid-column:1/3;grid-row:2}}
+footer{color:var(--mut);font-size:14px}
+</style></head><body>
+<div class="wrap">
+ <header class="top">
+  <div class="titlerow"><h1>C1 Advanced <span class="acc">trénink</span></h1><span class="count" id="count" hidden></span></div>
+  <p class="sub">Procvičování na Cambridge C1 Advanced: krátká kola, hned vidíš proč, sbíráš XP. <b class="g">Writing má přednost</b>, protože podle učitelky na něm záleží nejvíc.</p>
+  <div class="xpbar"><span class="lvl" id="lvl">LVL 1</span><div class="xp"><i id="xpi"></i></div><span class="stat" id="xpt">0 XP · série 0</span></div>
+ </header>
+ <nav class="tabs" id="tabs" role="tablist" aria-label="Části zkoušky"></nav>
+ <main id="main" class="stack"></main>
+ <footer>Všechny texty a úlohy jsou původní cvičné materiály ve formátu C1 Advanced, nejsou to oficiální testy Cambridge. Postup se ukládá jen v tomhle prohlížeči.</footer>
+</div>
+<script src="data.js"></script>
+<script src="data-writing.js"></script>
+<script>
+const C=window.C1, L='ABCDEFGH';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const norm=s=>String(s).toLowerCase().replace(/[’‘`´]/g,"'").replace(/[–—-]/g,' ').replace(/[.,!?;:"“”„()]/g,' ').replace(/\s+/g,' ').trim();
+const mmss=s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+const head=(t,s)=>`<div class="card intro"><h2>${t}</h2><p class="sub">${s}</p></div>`;
+
+/* ---------- state ---------- */
+const KEY='c1-state';
+const S={xp:0,streak:0,stats:{},wrong:[],drafts:{},wtask:'e0',voice:null};
+try{Object.assign(S,JSON.parse(localStorage.getItem(KEY))||{})}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+function score(key,ok,id){
+  const st=S.stats[key]||(S.stats[key]={ok:0,n:0});st.n++;
+  if(ok){st.ok++;S.xp+=10;S.streak++}else S.streak=0;
+  if(id){S.wrong=S.wrong.filter(x=>x!==id);if(!ok)S.wrong.push(id)}
+  save();hud();
+}
+function accept(key,id){const st=S.stats[key];if(st)st.ok++;S.xp+=10;S.streak++;S.wrong=S.wrong.filter(x=>x!==id);save();hud()}
+function hud(){
+  const lv=Math.floor(S.xp/150)+1;$('#lvl').textContent='LVL '+lv;
+  $('#xpi').style.width=(S.xp%150)/1.5+'%';$('#xpt').textContent=`${S.xp} XP · série ${S.streak}`;
+  const nw=$('#nwrong');if(nw)nw.textContent=`(${S.wrong.filter(x=>/^p[1-4]-/.test(x)).length})`;
+}
+(function countdown(){ // exam: Fri 27 + Sat 28 Nov 2026
+  const now=new Date(),d0=new Date(now.getFullYear(),now.getMonth(),now.getDate()),ex=new Date(2026,10,27);
+  const days=Math.round((ex-d0)/864e5),el=$('#count');
+  if(days>1)el.textContent=`zkouška za ${days} dny`;else if(days===1)el.textContent='zkouška zítra';else if(days>=-1)el.textContent='dnes je zkouška – hodně štěstí!';else return;
+  if(days>4)el.textContent=`zkouška za ${days} dní`;
+  el.hidden=false;
+})();
+
+/* ---------- timers ---------- */
+let actx;const T=[];
+function beep(){try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=880;g.gain.setValueAtTime(.25,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+.7);o.connect(g).connect(actx.destination);o.start();o.stop(actx.currentTime+.7)}catch(e){}}
+function timer(host,sec,label,onEnd){
+  host.classList.add('timer');
+  host.innerHTML=`${label?`<span class="tl">${esc(label)}</span>`:''}<span class="tm">${mmss(sec)}</span><button type="button" class="sm" data-a="go">▶ Start</button><button type="button" class="sm" data-a="re" aria-label="Vynulovat čas">↺</button>`;
+  let left=sec,id=null;const tm=$('.tm',host),go=$('[data-a=go]',host);
+  const draw=()=>{tm.textContent=mmss(left);host.classList.toggle('low',left>0&&left<=10);host.classList.toggle('end',left===0)};
+  const stop=()=>{clearInterval(id);id=null;go.textContent='▶ Start'};
+  const start=()=>{if(id||left<=0)return;try{actx=actx||new(window.AudioContext||window.webkitAudioContext)()}catch(e){}go.textContent='❚❚ Pauza';id=setInterval(()=>{left--;draw();if(left<=0){stop();beep();onEnd&&onEnd()}},1000)};
+  go.onclick=()=>id?stop():start();
+  $('[data-a=re]',host).onclick=()=>{stop();left=sec;draw()};
+  draw();const t={host,start,stop};T.push(t);return t;
+}
+function stopTimers(scope){for(let i=T.length-1;i>=0;i--){const t=T[i];if(!t.host.isConnected||scope.contains(t.host)){t.stop();T.splice(i,1)}}}
+
+/* ---------- tabs ---------- */
+const TABS=[['prehled','Přehled'],['writing','Writing <span class="star">★</span>'],['uoe','Use of English'],['reading','Reading'],['listening','Listening'],['speaking','Speaking'],['slovicka','Slovíčka']];
+const R={},inited={};let pendingSub=null;
+$('#tabs').innerHTML=TABS.map(([k,l])=>`<button type="button" role="tab" data-t="${k}" aria-selected="false">${l}</button>`).join('');
+$('#main').innerHTML=TABS.map(([k])=>`<section class="stack tab" id="t-${k}" role="tabpanel" hidden></section>`).join('');
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(b)location.hash=b.dataset.t});
+function show(tab,sub){
+  if(!R[tab])tab='prehled';
+  $$('.tab').forEach(s=>s.hidden=s.id!=='t-'+tab);
+  $$('#tabs button').forEach(b=>{const on=b.dataset.t===tab;b.setAttribute('aria-selected',on);if(on)b.scrollIntoView({block:'nearest',inline:'nearest'})});
+  if(tab!=='listening')TTS.stop();
+  if(!inited[tab]){inited[tab]=true;R[tab].init($('#t-'+tab))}
+  if(sub!=null&&R[tab].sub)R[tab].sub(String(sub));
+  const tabsTop=$('#tabs').getBoundingClientRect().top;if(tabsTop<0)window.scrollTo({top:window.scrollY+tabsTop});
+}
+function go(tab,sub){if(location.hash==='#'+tab)show(tab,sub);else{pendingSub=sub;location.hash=tab}}
+window.addEventListener('hashchange',()=>{const s=pendingSub;pendingSub=null;show(location.hash.slice(1),s)});
+function subnav(root,items,onPick){
+  const nav=document.createElement('div');nav.className='chips';nav.setAttribute('role','group');
+  nav.innerHTML=items.map(([k,l])=>`<button type="button" data-k="${k}">${l}</button>`).join('');
+  const area=document.createElement('div');area.className='area';root.append(nav,area);
+  const pickK=k=>{$$('button',nav).forEach(b=>b.classList.toggle('on',b.dataset.k===k));stopTimers(area);TTS.stop();onPick(k,area);hud()};
+  nav.addEventListener('click',e=>{const b=e.target.closest('button');if(b)pickK(b.dataset.k)});
+  return {pick:pickK,area};
+}
+/* single-choice option buttons inside .qs / .opts.pick */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.choose .opt');if(!b||b.disabled)return;
+  $$('.opt',b.parentElement).forEach(o=>{o.classList.toggle('on',o===b);o.setAttribute('aria-checked',o===b)});
+});
+function mcqHTML(qs,labels){ // qs: [text, options|null, answer, why]
+  return `<ol class="qs">${qs.map((q,i)=>`<li data-q="${i}"><p class="en" lang="en">${esc(q[0])}</p><div class="opts choose${labels?' short':''}" role="radiogroup">${(labels||q[1]).map((o,j)=>`<button type="button" class="opt" role="radio" aria-checked="false" data-o="${j}"><b>${L[j]}</b><span lang="en">${esc(o)}</span></button>`).join('')}</div><div class="why"></div></li>`).join('')}</ol>`;
+}
+function checkMCQ(scope,qs,key){
+  let ok=0;
+  $$('li[data-q]',scope).forEach(li=>{
+    const q=qs[+li.dataset.q],sel=$('.opt.on',li),good=sel&&+sel.dataset.o===q[2];
+    $$('.opt',li).forEach(o=>{o.disabled=true;if(+o.dataset.o===q[2])o.classList.add('right');else if(o===sel)o.classList.add('bad')});
+    const w=$('.why',li);w.className='why show '+(good?'okc':'noc');w.textContent=(good?'✔ ':'✖ Správně '+L[q[2]]+'. ')+(q[3]||'');
+    if(good)ok++;score(key,good);
+  });
+  return ok;
+}
+function unanswered(scope){return $$('li[data-q]',scope).filter(li=>!$('.opt.on',li)).length}
+
+/* ================= PŘEHLED ================= */
+const PAPERS=[
+ {name:'Reading & Use of English',meta:'1 h 30 min · 56 otázek · 40 % výsledku',parts:[
+  ['1','Multiple-choice cloze','8 otázek · ~7 min','Kolokace, frázová slovesa, idiomy. Rozhoduje i předložka ZA mezerou.','uoe','1'],
+  ['2','Open cloze','8 · ~7 min','Gramatická slova (předložky, spojky, zájmena, pomocná slovesa). Vždy přesně 1 slovo.','uoe','2'],
+  ['3','Word formation','8 · ~7 min','Předpony a přípony. Smysl věty prozradí zápor (un-, in-, dis-, mis-).','uoe','3'],
+  ['4','Key word transformation','6 × 2 b. · ~10 min','3–6 slov, klíčové slovo neměň. Body jsou za každou půlku zvlášť, takže piš vždycky aspoň něco.','uoe','4'],
+  ['5','Multiple choice (dlouhý text)','6 × 2 b. · ~15 min','Detail, postoj autora, odkazy (it, this, the latter). Otázky jdou popořadě s textem.','reading','5'],
+  ['6','Cross-text matching (4 autoři)','4 × 2 b. · ~10 min','Kdo s kým souhlasí. Udělej si tabulku téma × autor (+ / −).','reading','6'],
+  ['7','Gapped text (odstavce)','6 × 2 b. · ~13 min','Sleduj this/they/it, jména a časové údaje před mezerou i za ní.','reading','7'],
+  ['8','Multiple matching','10 · ~13 min','Hledání konkrétní informace. Skenuj podle klíčových slov, nečti všechno dokola.','reading','8']]},
+ {name:'Writing',meta:'1 h 30 min · 2 úlohy · 20 % ★',parts:[
+  ['1','Essay (povinný)','220–260 slov · 45 min','Rozeber 2 ze 3 bodů a v závěru řekni, který je důležitější a proč.','writing','napsat'],
+  ['2','Výběr ze 3: email/dopis, proposal, report, review','220–260 slov · 45 min','Správný žánr, registr a struktura. Vyber žánr, jehož kostru znáš nazpaměť.','writing','jak']]},
+ {name:'Listening',meta:'cca 40 min · 30 otázek · 20 % · každá nahrávka 2×',parts:[
+  ['1','3 krátké úryvky','6 otázek','Názor, postoj, účel, shoda mluvčích. 1. poslech tipni, 2. potvrď.','listening','1'],
+  ['2','Doplňování vět (monolog)','8','Slovo uslyšíš přesně. Pozor na pravopis a na pasti (zmíní víc možností).','listening','2'],
+  ['3','Rozhovor','6','Názory a postoje. Správná odpověď bývá parafráze, ne stejná slova.','listening','3'],
+  ['4','5 mluvčích, 2 úkoly','10','Při 1. poslechu řeš úkol 1, při 2. úkol 2.','listening','4']]},
+ {name:'Speaking',meta:'15 min ve dvojici · 20 % · často jiný den',parts:[
+  ['1','Rozhovor','2 min','Otázky o tobě: odpověz 2–3 větami, ne jedním slovem.','speaking','1'],
+  ['2','Long turn (obrázky)','1 min + 30 s','Porovnej 2 ze 3 obrázků a odpověz na obě otázky. Srovnávej, nepopisuj.','speaking','2'],
+  ['3','Spolupráce','2 + 1 min','Diskuse nad 5 body, pak společné rozhodnutí. Ptej se partnera a reaguj.','speaking','3'],
+  ['4','Diskuse','5 min','Širší otázky k tématu: názor → důvod → příklad.','speaking','4']]}
+];
+const STATS=[['wd','Writing drily'],['uoe1','UoE 1 výběr'],['uoe2','UoE 2 slovo'],['uoe3','UoE 3 tvoření'],['uoe4','UoE 4 transformace'],['r5','Reading 5'],['r6','Reading 6'],['r7','Reading 7'],['r8','Reading 8'],['l1','Listening 1'],['l2','Listening 2'],['l3','Listening 3'],['l4','Listening 4'],['voc','Slovíčka']];
+const STAT_GO={wd:['writing','drily'],uoe1:['uoe','1'],uoe2:['uoe','2'],uoe3:['uoe','3'],uoe4:['uoe','4'],r5:['reading','5'],r6:['reading','6'],r7:['reading','7'],r8:['reading','8'],l1:['listening','1'],l2:['listening','2'],l3:['listening','3'],l4:['listening','4'],voc:['slovicka','kviz']};
+R.prehled={init(root){
+  root.innerHTML=`<div class="card intro"><h2>Zkouška v kostce</h2><p class="sub">Čtyři papíry, pět dovedností, každá je 20 % výsledku. Pod každou částí je tip a tlačítko rovnou do tréninku.</p></div>
+  ${PAPERS.map(p=>`<div class="card"><div class="paperh"><h3>${p.name}</h3><span class="pmeta">${p.meta}</span></div><div class="parts">${p.parts.map(x=>`<div class="prow"><span class="pnum">${x[0]}</span><div><div class="t">${x[1]}</div><div class="m">${x[2]}</div></div><button type="button" class="sm" data-go="${x[4]}" data-sub="${x[5]}">Trénovat →</button><div class="tip">${x[3]}</div></div>`).join('')}</div></div>`).join('')}
+  <div class="card"><h3>Tvoje statistiky</h3><div id="stats" class="bars"></div><div id="weak"></div></div>
+  <div class="card"><h3>Plán do zkoušky</h3><ul class="plan">
+   <li><b>Út 24. 11. (dnes)</b>: Writing → <i>Jak se hodnotí</i> + jeden modelový text nahlas. Pak drily <i>B2 → C1</i> a <i>Chyby Čechů</i>. Nakonec jedno kolo z každé části Use of English.</li>
+   <li><b>St 25. 11. (po testu z vektorů)</b>: jeden essay na čas (45 min) + <i>Zkontrolovat text</i>. Pak Listening, části 1–4.</li>
+   <li><b>Čt 26. 11.</b>: jedna úloha z Part 2 na čas (report nebo proposal) + kontrola. Pak Reading 5–8, dvakrát Mix 10 min a nahraj se ve Speaking 2 a 3.</li>
+   <li><b>Pá 27. a So 28. 11.</b>: ráno 15 minut na rozehřátí: <i>Chyby</i> z UoE, jedno kolo drilů, fráze. Nic nového.</li></ul></div>
+  <div class="card"><h3>Jak se počítá výsledek</h3><p class="sub">Každá dovednost (Reading, Use of English, Writing, Listening, Speaking) má body na Cambridge English Scale a výsledek je jejich průměr. Slabší část tedy vytáhnou ostatní.</p>
+   <div class="grades"><b>200–210</b><span>Grade A: certifikát na úrovni C2</span><b>193–199</b><span>Grade B: C1</span><b>180–192</b><span>Grade C: C1</span><b>160–179</b><span>certifikát na úrovni B2</span></div>
+   <p class="hint">Podrobnosti tvého centra (papír nebo počítač, který den je speaking) najdeš v pozvánce ke zkoušce. Vezmi si doklad, který jsi uvedl při registraci.</p></div>`;
+  root.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go,b.dataset.sub)});
+  this.stats();
+ },
+ stats(){
+  const box=$('#stats');if(!box)return;
+  const rows=STATS.filter(([k])=>S.stats[k]&&S.stats[k].n);
+  box.innerHTML=rows.length?rows.map(([k,l])=>{const s=S.stats[k],p=Math.round(100*s.ok/s.n),c=p>=75?'var(--ok)':p>=50?'var(--g)':'var(--r)';
+    return `<div class="bar"><span>${l}</span><span class="b"><i style="width:${p}%;background:${c}"></i></span><span class="v">${p} % · ${s.n}</span></div>`}).join(''):'<p class="hint">Zatím nic. Začni Writingem nebo jedním kolem Use of English.</p>';
+  const weak=rows.filter(([k])=>S.stats[k].n>=4).sort((a,b)=>S.stats[a[0]].ok/S.stats[a[0]].n-S.stats[b[0]].ok/S.stats[b[0]].n)[0];
+  $('#weak').innerHTML=weak?`<div class="row-b"><span class="hint">Nejslabší: <b>${weak[1]}</b></span><button type="button" class="sm main" data-go="${STAT_GO[weak[0]][0]}" data-sub="${STAT_GO[weak[0]][1]}">Procvičit →</button></div>`:'';
+ }};
+const _hud=hud;hud=function(){_hud();if(inited.prehled)R.prehled.stats()};
+
+/* ================= WRITING ================= */
+const TASKS=[...C.essays.map((e,i)=>({id:'e'+i,type:'essay',label:'Part 1 · Essay: '+e.title,e})),...C.part2.map((p,i)=>({id:'w'+i,type:p.type,label:'Part 2 · '+p.title,p}))];
+const MODEL_FOR={e0:0,w0:1,w1:2,w2:3,w3:4,w4:5};
+const GENRE={essay:'Essay',email:'Email (neformální)',letter:'Dopis (formální)',proposal:'Proposal',report:'Report',review:'Review'};
+const FORMAL={essay:1,letter:1,proposal:1,report:1};
+const W={};
+R.writing={init(root){
+  root.innerHTML=head('Writing <span class="star">★ priorita</span>','Dvě úlohy za 90 minut: Part 1 je povinný essay, v Part 2 vybíráš ze tří zadání. Piš na čas, text ti zkontroluje automatická kontrola a drily trénují přesně to, co chtějí hodnotitelé vidět.');
+  this.s=subnav(root,[['napsat','✍️ Napsat úlohu'],['drily','Drily'],['modely','Modelové texty'],['jak','Jak se hodnotí + struktury']],(k,a)=>W[k](a));
+  this.s.pick('napsat');
+ },sub(k){this.s.pick(k)}};
+
+function taskHTML(t){
+  if(t.type==='essay'){const e=t.e;return `<span class="lab">Part 1 · Essay</span><p>${esc(e.task)}</p><div><b>Notes</b><br>Which is more important?<ul>${e.notes.map(n=>`<li>${esc(n)}</li>`).join('')}</ul></div><div><span class="lab">Some opinions expressed in the discussion</span><ul>${e.opinions.map(n=>`<li>${esc(n)}</li>`).join('')}</ul></div><p>${C.essayRubric}</p>`}
+  return `<span class="lab">Part 2 · ${GENRE[t.type]}</span><p>${esc(t.p.task)}</p>`;
+}
+function planHTML(type){const s=C.structures[type];return `<p class="hint">Registr: ${esc(s.reg)}</p><ol>${s.plan.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`}
+const countWords=t=>(t.match(/[A-Za-zÀ-ž0-9€£$%]+(?:['’-][A-Za-z]+)*/g)||[]).length;
+function wcClass(n){return n>=220&&n<=260?'okc':(n>=200&&n<=290?'warnc':'badc')}
+W.napsat=function(area){
+  const opts=g=>TASKS.filter(t=>g?t.type==='essay':t.type!=='essay').map(t=>`<option value="${t.id}">${esc(t.label)}</option>`).join('');
+  area.innerHTML=`<div class="card">
+   <div class="row-b"><label class="lbl" style="flex:1 1 260px">Zadání<select id="wsel"><optgroup label="Part 1 – Essay">${opts(1)}</optgroup><optgroup label="Part 2 – výběr">${opts(0)}</optgroup></select></label><button type="button" id="wrand" style="align-self:flex-end">🎲 Náhodné</button></div>
+   <div class="paper" lang="en" id="wtask"></div>
+   <details open><summary>Struktura: <span id="wtype"></span></summary><div id="wplan"></div></details>
+   <div class="wtools"><div id="wtimer"></div><span class="wc" id="wc" aria-live="polite">0 slov</span></div>
+   <textarea id="wtext" lang="en" spellcheck="false" autocapitalize="sentences" placeholder="Piš sem. Odstavce odděluj prázdným řádkem. Kontrola pravopisu je vypnutá, stejně jako u zkoušky." aria-label="Tvůj text"></textarea>
+   <div class="row-b"><button type="button" class="main" id="wchk">Zkontrolovat text</button><button type="button" id="wcopy">Kopírovat</button><button type="button" id="wclear">Smazat</button><span class="hint" id="wmsg"></span></div>
+   <div id="wres" class="stack"></div>
+   <details><summary>Fráze pro tento žánr</summary><div class="phr" lang="en" id="wphr"></div></details>
+   <details><summary>Checklist před odevzdáním</summary><div class="checks" id="wcheck">${C.checklist.map((c,i)=>`<label><input type="checkbox" data-i="${i}"> <span>${esc(c)}</span></label>`).join('')}</div></details>
+   <details id="wmodel"><summary>Modelová odpověď (otevři ji, až to napíšeš sám!)</summary><div id="wmodelc"></div></details>
+  </div>`;
+  const sel=$('#wsel',area),ta=$('#wtext',area),wc=$('#wc',area);
+  timer($('#wtimer',area),45*60,'45 min na úlohu');
+  const upd=()=>{const n=countWords(ta.value);wc.textContent=n+' slov';wc.className='wc '+(n?wcClass(n):'')};
+  let saveT,cur=null;
+  const flush=()=>{clearTimeout(saveT);if(!cur)return;if(ta.value.trim())S.drafts[cur]=ta.value;else delete S.drafts[cur];save()};
+  ta.addEventListener('input',()=>{upd();clearTimeout(saveT);saveT=setTimeout(flush,400)});
+  const load=id=>{
+    flush();
+    const t=TASKS.find(x=>x.id===id)||TASKS[0];cur=t.id;S.wtask=t.id;save();sel.value=t.id;
+    $('#wtask',area).innerHTML=taskHTML(t);$('#wtype',area).textContent=GENRE[t.type];$('#wplan',area).innerHTML=planHTML(t.type);
+    $('#wphr',area).innerHTML=C.phrases[t.type].map(p=>`<span>${esc(p)}</span>`).join('');
+    ta.value=S.drafts[t.id]||'';upd();$('#wres',area).innerHTML='';$$('#wcheck input',area).forEach(c=>c.checked=false);
+    const mi=MODEL_FOR[t.id]!=null?MODEL_FOR[t.id]:C.models.findIndex(m=>m.type===t.type);
+    $('#wmodelc',area).innerHTML=mi>=0?(MODEL_FOR[t.id]==null?'<p class="hint">K tomuhle zadání nemám přesný model, tady je model stejného žánru:</p>':'')+modelHTML(C.models[mi]):'';
+    $('#wmodel',area).open=false;
+  };
+  sel.onchange=()=>load(sel.value);
+  $('#wrand',area).onclick=()=>load(pick(TASKS.filter(t=>t.id!==sel.value)).id);
+  $('#wchk',area).onclick=()=>{const t=TASKS.find(x=>x.id===sel.value);const tt=t.e?[t.e.task,...t.e.notes,...t.e.opinions].join(' '):t.p.task;$('#wres',area).innerHTML=resultHTML(ta.value,t.type,tt);$('#wres',area).scrollIntoView({behavior:'smooth',block:'start'})};
+  $('#wcopy',area).onclick=()=>{const m=$('#wmsg',area);navigator.clipboard.writeText(ta.value).then(()=>m.textContent='Zkopírováno.',()=>{ta.select();m.textContent='Text je označený, zkopíruj ho ručně.'})};
+  let armed=0;$('#wclear',area).onclick=e=>{if(Date.now()-armed<3000){ta.value='';flush();upd();$('#wres',area).innerHTML='';e.target.textContent='Smazat';armed=0}else{armed=Date.now();e.target.textContent='Opravdu smazat?';setTimeout(()=>e.target.textContent='Smazat',3000)}};
+  load(S.wtask);
+};
+
+/* ---- text checker ---- */
+// word forms: first and last word get common endings (thrive → thriving, take sth for granted → took X for granted)
+const SUF='(?:e|y|es|ed|ing|s|d|ly|ion|ions|ies|ied)?\\b',stemRe=w=>w.replace(/(e|y)$/,'')+SUF;
+const VOCAB_RE=C.vocab.map(v=>{const ws=v[0].replace(/^(to |a |an |the )?(be )?/,'').split(' ');ws[0]=stemRe(ws[0]);if(ws.length>1)ws[ws.length-1]=stemRe(ws[ws.length-1]);return [v[0],new RegExp('\\b'+ws.map(w=>w==='sth'?'(?:\\w+\\s+){0,3}?\\w+':w).join('\\s+'),'gi')]});
+const LINK_RE=C.check.linkers.map(l=>[l,new RegExp('\\b'+l.replace(/ /g,'\\s+')+'\\b','gi')]);
+const WEAK_RE=Object.keys(C.check.weak).map(w=>[w,new RegExp('\\b'+w.replace(/ /g,'\\s+')+'\\b','gi')]);
+const CONTR_RE=/\b[a-z]+(n't|'re|'ve|'ll|'m|'d)\b|\b(it|that|there|what|he|she|who|here|let)'s\b/gi;
+const STOP=new Set('about above after again against their there these those which while would could should other being where every because before through between people really think things doing having under while whose whom since until might shall still'.split(' '));
+function matches(t,re){re.lastIndex=0;const out=[];let m;while((m=re.exec(t))){const lead=(m[1]&&/^[.!?\s]*$/.test(m[1]))?m[1].length:0;out.push([m.index+lead,m.index+m[0].length]);if(!m[0].length)re.lastIndex++}return out}
+function analyse(text,type,taskTxt){
+  const t=text.replace(/[’‘]/g,"'"),res=[],marks=[];
+  const add=(lvl,msg)=>res.push([lvl,msg]);
+  const wc=countWords(t),lines=t.split('\n').map(s=>s.trim()).filter(Boolean);
+  const paras=t.split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);
+  const pc=paras.length>1?paras.length:lines.length;
+  const sents=(t.replace(/\n+/g,' ').match(/[^.!?]+[.!?]*/g)||[]).map(s=>s.trim()).filter(s=>/[a-z]/i.test(s));
+  // 1 length
+  add(wc>=220&&wc<=260?'ok':(wc>=200&&wc<=290?'warn':'bad'),`<b>${wc}</b> slov. Cíl je 220–260.${wc<220?' Krátký text přichází o body za obsah.':wc>260?' Delší text body nepřidá a bere čas.':''}`);
+  // 2 paragraphs
+  const minP=type==='essay'?4:4;
+  add(pc>=minP?'ok':'warn',`<b>${pc}</b> odstavců/řádků.${pc<minP?' Rozděl text do aspoň 4 odstavců, hodnotí se i organizace.':''}`);
+  // 3 linkers
+  const L1=LINK_RE.filter(([l,re])=>{const m=matches(t,re);m.forEach(r=>marks.push([...r,'hl-l']));return m.length});
+  add(L1.length>=6?'ok':L1.length>=3?'warn':'bad',`<b>${L1.length}</b> různých spojovacích výrazů${L1.length?': '+L1.map(x=>esc(x[0])).join(', '):''}.${L1.length<6?' Přidej další, třeba Moreover, Consequently, Admittedly nebo On balance.':''}`);
+  // 4 advanced structures
+  const A=C.check.advanced.filter(([re,lab])=>{const m=matches(t,re);m.forEach(r=>marks.push([...r,'hl-a']));return m.length}).map(x=>x[1]);
+  add(A.length>=2?'ok':A.length?'warn':'bad',`<b>${A.length}</b> pokročilých struktur${A.length?': '+[...new Set(A)].join(', '):''}.${A.length<2?' Na C1 zkus: Not only does…, What matters most is…, Having considered…, It is widely believed that…':''}`);
+  // 5 C1 vocab
+  const V1=VOCAB_RE.filter(([w,re])=>{const m=matches(t,re);m.forEach(r=>marks.push([...r,'hl-a']));return m.length}).map(x=>x[0]);
+  add(V1.length>=2?'ok':'warn',`<b>${V1.length}</b> slov C1/C2 ze Slovíček${V1.length?': '+V1.map(esc).join(', '):''}.${V1.length<2?' Zkus zapojit aspoň 2–3, třeba detrimental, to tackle nebo a double-edged sword.':''}`);
+  // 6 weak words
+  const Wk=WEAK_RE.map(([w,re])=>{const m=matches(t,re).filter(r=>!(w==='very'&&/the $/i.test(t.slice(Math.max(0,r[0]-4),r[0]))));m.forEach(r=>marks.push([...r,'hl-w']));return [w,m.length]}).filter(x=>x[1]); // "the very people" is emphasis, not weak
+  const wsum=Wk.reduce((a,x)=>a+x[1],0);
+  if(wsum>4)add('warn',`Slabší slova (${wsum}×): `+Wk.map(([w,n])=>`<b>${esc(w)}</b> ×${n} → ${esc(C.check.weak[w])}`).join(' · '));
+  else add('ok','Skoro žádná slabá slova (very, good, a lot of…).');
+  // 7 contractions
+  const ct=matches(t,CONTR_RE);
+  if(FORMAL[type]){if(ct.length){ct.forEach(r=>marks.push([...r,'hl-c']));add('bad',`<b>${ct.length}</b> stažených tvarů (${[...new Set(ct.map(r=>esc(t.slice(r[0],r[1]))))].join(', ')}). Ve formálním textu je rozepiš: it is, do not…`)}else add('ok','Žádné stažené tvary, správně na formální text.')}
+  else if(!ct.length)add('warn','Kamarádovi klidně piš stažené tvary (I\'m, don\'t…), text bude přirozenější.');
+  // 8 czech mistakes
+  const cz=[];C.check.czech.forEach(([re,msg])=>{const m=matches(t,re);if(m.length){cz.push(msg);m.forEach(r=>marks.push([...r,'hl-c']))}});
+  if(cz.length)add('bad','Typické chyby: '+cz.map(esc).join(' · '));
+  // 9 repetition
+  // topic words from the task (students, transport…) may repeat; only flag other words used 5+ times
+  const topic=new Set((String(taskTxt||'').toLowerCase().match(/[a-z]{5,}/g)||[]).flatMap(w=>[w,w+'s',w.replace(/s$/,'')]));
+  const cnt={};(t.toLowerCase().match(/[a-z]{5,}/g)||[]).forEach(w=>{if(!STOP.has(w)&&!topic.has(w))cnt[w]=(cnt[w]||0)+1});
+  const rep=Object.entries(cnt).filter(([,n])=>n>=5).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  if(rep.length)add('warn','Opakuješ: '+rep.map(([w,n])=>`<b>${esc(w)}</b> ×${n}`).join(', ')+'. Najdi synonymum nebo použij this/such/it.');
+  // 10 sentences
+  const long=sents.filter(s=>countWords(s)>40).length,avg=sents.length?wc/sents.length:0;
+  if(long)add('warn',`${long}× moc dlouhá věta (přes 40 slov). Rozděl ji.`);
+  else if(sents.length>4&&avg<11)add('warn',`Věty jsou krátké (průměr ${avg.toFixed(0)} slov). Spojuj je: which, although, whereas, -ing.`);
+  else if(sents.length>4)add('ok',`Délka vět je v pořádku (průměr ${avg.toFixed(0)} slov).`);
+  // 11 genre
+  const low=t.toLowerCase(),first=lines[0]||'',lastL=lines.slice(-3).join(' ').toLowerCase();
+  const heads=lines.filter(l=>countWords(l)<=6&&!/[.,:;!?]$/.test(l)&&!/^dear\b/i.test(l)&&!/^(hi|hello)\b/i.test(l)).length;
+  if(type==='essay'){
+    add(/\b(in conclusion|to conclude|to sum up|on balance|all things considered|overall)\b/i.test(t)?'ok':'bad','Závěr '+(/\b(in conclusion|to conclude|to sum up|on balance|all things considered|overall)\b/i.test(t)?'je jasně uvedený.':'chybí, nebo není uvedený (In conclusion / On balance…).'));
+    add(/\b(more|most) (important|effective|significant|beneficial|urgent|valuable)\b|\b(the )?(main |top )?priority\b|\boutweigh|\bcrucial\b|\bparamount\b/i.test(t)?'ok':'bad','Rozhodnutí, který bod je důležitější: '+(/\b(more|most) (important|effective|significant|beneficial|urgent|valuable)\b|\bpriority\b|\boutweigh|\bcrucial\b|\bparamount\b/i.test(t)?'je tam ✔':'CHYBÍ. Zadání ho vyžaduje (… is more important because…).'));
+    if(heads>=2)add('warn','Essay nemá mít nadpisy.');
+  }else if(type==='letter'){
+    add(/^dear\b/i.test(first)?'ok':'bad','Oslovení Dear…: '+(/^dear\b/i.test(first)?'✔':'chybí'));
+    const sinc=/yours sincerely/i.test(lastL),faith=/yours faithfully/i.test(lastL),sir=/dear sir|dear madam|sir or madam/i.test(first);
+    if(!sinc&&!faith)add('bad','Chybí formální rozloučení (Yours sincerely / Yours faithfully).');
+    else if(sir&&sinc)add('bad','Dear Sir or Madam se pojí s Yours faithfully.');
+    else if(!sir&&faith)add('warn','Když znáš jméno (Dear Ms…), patří tam Yours sincerely.');
+    else add('ok','Oslovení i rozloučení k sobě sedí.');
+  }else if(type==='email'){
+    add(/^(hi|hello|hey|dear)\b/i.test(first)?'ok':'warn','Pozdrav na začátku: '+(/^(hi|hello|hey|dear)\b/i.test(first)?'✔':'chybí (Hi Sam,)'));
+    add(/(see you|take care|best wishes|all the best|love|cheers|speak soon|write soon|can't wait|bye)/i.test(lastL)?'ok':'warn','Neformální rozloučení: '+(/(see you|take care|best wishes|all the best|love|cheers|speak soon|write soon|can't wait|bye)/i.test(lastL)?'✔':'chybí (Take care / Can\'t wait to see you!)'));
+  }else if(type==='proposal'||type==='report'){
+    add(heads>=3?'ok':'bad',`Nadpisy sekcí: ${heads}. ${heads>=3?'✔':'U '+type+' jsou nadpisy skoro povinné (Introduction / … / Recommendations).'}`);
+    add(/recommend|suggest|propose|advisable/i.test(t)?'ok':'bad','Doporučení: '+(/recommend|suggest|propose|advisable/i.test(t)?'✔':'chybí, a to je jádro textu.'));
+  }else if(type==='review'){
+    const hook=sents.slice(0,2).join(' ');
+    add(/[?!]|\byou\b/i.test(hook)?'ok':'warn','Úvodní háček pro čtenáře: '+(/[?!]|\byou\b/i.test(hook)?'✔':'zkus otázku nebo oslovení čtenáře.'));
+    add(/recommend|worth|give it a miss|must-see|don't miss/i.test(t)?'ok':'bad','Doporučení na konci: '+(/recommend|worth|give it a miss|must-see|don't miss/i.test(t)?'✔':'chybí.'));
+  }
+  return {res,marks,t};
+}
+function highlight(t,marks){
+  marks.sort((a,b)=>a[0]-b[0]||b[1]-a[1]);let out='',pos=0;
+  for(const [s,e,c] of marks){if(s<pos)continue;out+=esc(t.slice(pos,s))+`<span class="${c}">${esc(t.slice(s,e))}</span>`;pos=e}
+  return (out+esc(t.slice(pos))).split(/\n\s*\n/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+}
+function resultHTML(text,type,taskTxt){
+  if(countWords(text)<30)return '<div class="fb info">Napiš aspoň pár odstavců, pak ti to zkontroluju.</div>';
+  const {res,marks,t}=analyse(text,type,taskTxt),ic={ok:'✔',warn:'⚠',bad:'✖'};
+  const bad=res.filter(r=>r[0]==='bad').length,warn=res.filter(r=>r[0]==='warn').length;
+  return `<div class="card"><h3>Kontrola: ${bad?`${bad}× opravit`:'bez vážných problémů'}${warn?`, ${warn}× vylepšit`:''}</h3>
+   <div class="res">${res.map(([l,m])=>`<div class="rr ${l}r">${ic[l]} ${m}</div>`).join('')}</div>
+   <details open><summary>Tvůj text se zvýrazněním</summary><div class="paper" lang="en">${highlight(t,marks)}</div>
+   <div class="legend"><span class="hl-l">spojky</span><span class="hl-a">C1 struktury a slova</span><span class="hl-w">slabá slova</span><span class="hl-c">chyba / stažený tvar</span></div></details>
+   <p class="hint">Automatická kontrola hlídá formu (délku, strukturu, spojky, registr, typické chyby), obsah neposoudí. Na ten použij checklist, nebo text pošli učitelce.</p></div>`;
+}
+function modelHTML(m){
+  const t=m.text.join('\n\n'),{marks}=analyse(t,m.type);
+  const body=m.text.map(p=>{const isHead=(m.type==='proposal'||m.type==='report')&&countWords(p)<=5&&!/[.!?]$/.test(p);
+    if(isHead)return `<h4>${esc(p)}</h4>`;return null});
+  // highlight per paragraph so headings stay headings
+  let off=0;const parts=m.text.map((p,i)=>{const s=off,e=off+p.length;off=e+2;
+    const mk=marks.filter(x=>x[0]>=s&&x[1]<=e).map(x=>[x[0]-s,x[1]-s,x[2]]);
+    return body[i]||`<p>${highlight(p,mk).replace(/^<p>|<\/p>$/g,'')}</p>`});
+  return `<div class="paper" lang="en"><span class="lab">${GENRE[m.type]} · ${countWords(t)} slov · ${esc(m.task)}</span>${m.type==='report'||m.type==='proposal'||m.type==='essay'||m.type==='review'?`<h3>${esc(m.title)}</h3>`:''}${parts.join('')}</div>
+   <div class="legend"><span class="hl-l">spojky</span><span class="hl-a">C1 struktury a slova</span><span class="hl-w">slabá slova</span></div>
+   <div><b>Čeho si všimnout</b><ul>${m.notes.map(n=>`<li>${esc(n)}</li>`).join('')}</ul></div>`;
+}
+W.modely=function(area){
+  area.innerHTML=`<div class="card"><p class="sub">Jeden model na každý žánr, kolem 250 slov. Spojky a C1 struktury jsou zvýrazněné, ať vidíš, čím text boduje. Přečti si je nahlas a fráze si vypůjč.</p><div class="chips">${C.models.map((m,i)=>`<button type="button" class="sm" data-m="${i}">${GENRE[m.type]}</button>`).join('')}</div></div>`+
+   C.models.map((m,i)=>`<div class="card" id="model-${i}">${modelHTML(m)}</div>`).join('');
+  area.firstChild.addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(b)$('#model-'+b.dataset.m).scrollIntoView({behavior:'smooth',block:'start'})});
+};
+W.jak=function(area){
+  area.innerHTML=`<div class="card"><h3>Jak se Writing hodnotí</h3><p class="sub">Každou úlohu hodnotí zkoušející podle 4 kritérií, každé za 0–5 bodů (max. 20 za úlohu).</p>
+   <div class="crit"><div><b>Content</b>Splnil jsi VŠECHNY body zadání a čtenář je plně informovaný. Chybějící bod = nejrychlejší ztráta bodů.</div>
+   <div><b>Communicative Achievement</b>Správný žánr a registr pro čtenáře (formální × neformální, nadpisy, oslovení) a text drží pozornost.</div>
+   <div><b>Organisation</b>Odstavce, logický tok, různé spojovací výrazy, odkazování (this, such, the former).</div>
+   <div><b>Language</b>Rozsah slovní zásoby a struktur (inverze, cleft věty, participle clauses, kolokace) + přesnost. Chyby, které nebrání porozumění, nevadí tolik jako chudý jazyk.</div></div></div>
+  <div class="card"><h3>Čas: 2 × 45 minut</h3><ul class="plan"><li><b>5–8 min</b> přečti zadání, podtrhni body a napiš si osnovu odstavců.</li><li><b>30 min</b> piš. Každý odstavec = jedna myšlenka.</li><li><b>5–7 min</b> kontrola: počet slov, časy, členy, předložky, stažené tvary ve formálním textu.</li></ul>
+   <p class="hint">V Part 2 vyber žánr, jehož kostru znáš nazpaměť. Report a proposal mají předvídatelné nadpisy, takže v nich ušetříš přemýšlení.</p></div>
+  <div class="card"><h3>Žánry: kostra a fráze</h3><div class="genres">${Object.keys(C.structures).map(k=>`<div class="genre"><h3>${GENRE[k]}</h3><p class="hint">${esc(C.structures[k].reg)}</p><ol>${C.structures[k].plan.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><details><summary>Fráze</summary><div class="phr" lang="en">${C.phrases[k].map(p=>`<span>${esc(p)}</span>`).join('')}</div></details></div>`).join('')}</div></div>
+  <div class="card"><h3>Nejčastější chyby, které stojí body</h3><ul class="plan">
+   <li><b>Essay bez rozhodnutí:</b> v závěru musíš říct, který bod je důležitější, a zdůvodnit to.</li>
+   <li><b>Převyprávění místo hodnocení</b> v review: děj max. 2–3 věty, zbytek je názor.</li>
+   <li><b>Špatný registr:</b> stažené tvary a hovorové výrazy ve formálním dopisu, nebo naopak strohý úřední tón kamarádovi.</li>
+   <li><b>Názory ze zadání okopírované</b> slovo od slova. Parafrázuj je.</li>
+   <li><b>Pořád stejné spojky</b> (and, but, also). Střídej je a používej i on the other hand, whereas, consequently.</li></ul></div>`;
+};
+W.drily=function(area){
+  const types=Object.keys(C.wd);
+  area.innerHTML=`<div class="card"><p class="sub">Krátké MCQ na to, co dělá text C1: upgrade vět, registr, spojky a chyby, které Češi dělají nejčastěji. Kolo má 8 otázek.</p><div class="chips" id="wdk">${types.map(k=>`<button type="button" data-k="${k}">${C.wd[k].name}</button>`).join('')}<button type="button" data-k="mix">Mix</button></div></div><div id="wdr"></div>`;
+  const start=k=>{$$('#wdk button',area).forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+    const pool=(k==='mix'?types:[k]).flatMap(t=>C.wd[t].items.map(x=>({t,x})));
+    drillRound($('#wdr',area),shuffle(pool).slice(0,8),k==='mix'?'Mix všech drilů.':C.wd[k].hint,()=>start(k))};
+  $('#wdk',area).addEventListener('click',e=>{const b=e.target.closest('button');if(b)start(b.dataset.k)});
+  start('upgrade');
+};
+function drillRound(box,items,hint,again){
+  let i=0,ok=0;const miss=[];
+  const step=()=>{
+    if(i>=items.length){box.innerHTML=`<div class="card"><h3>${ok}/${items.length} správně</h3>${miss.length?`<ul class="plan">${miss.map(({t,x})=>`<li><span lang="en"><b class="ok">${esc(x[1][0])}</b></span><br><span class="note">${esc(x[2])}</span></li>`).join('')}</ul>`:'<p>Čistě! 🎯</p>'}<div class="row-b"><button type="button" class="main" id="again">Další kolo</button></div></div>`;$('#again',box).onclick=again;return}
+    const {t,x}=items[i],ord=shuffle([0,1,2].slice(0,x[1].length));
+    box.innerHTML=`<div class="card"><div class="rhead"><span class="ptag">${C.wd[t].name} · ${i+1}/${items.length}</span><span class="stat">správně ${ok}</span></div><p class="hint">${esc(C.wd[t].hint)}</p>${x[0]?`<p class="q" lang="${t==='register'?'cs':'en'}">${esc(x[0])}</p>`:''}<div class="opts">${ord.map((o,j)=>`<button type="button" class="opt" data-o="${o}"><b>${L[j]}</b><span lang="en">${esc(x[1][o])}</span></button>`).join('')}</div><div class="fb" id="dfb"></div></div>`;
+    const opts=$$('.opt',box);
+    opts.forEach(b=>b.onclick=()=>{const good=+b.dataset.o===0;opts.forEach(o=>{o.disabled=true;if(+o.dataset.o===0)o.classList.add('right');else if(o===b)o.classList.add('bad')});
+      score('wd',good);if(good)ok++;else miss.push(items[i]);
+      const fb=$('#dfb',box);fb.className='fb '+(good?'ok':'no');fb.innerHTML=`<b>${good?'Správně! +10 XP':'Vedle.'}</b><div class="note">${esc(x[2])}</div><div class="row-b"><button type="button" class="main" id="dnx">Další →</button></div>`;
+      const nx=$('#dnx',box);nx.onclick=()=>{i++;step()};nx.focus({preventScroll:true});fb.scrollIntoView({block:'nearest'})});
+  };
+  step();
+}
+
+/* ================= USE OF ENGLISH ================= */
+const UOE_INFO={'1':'Vyber slovo, které sedí do mezery. Hlídej kolokace a předložku za mezerou. Klávesy 1–4 fungují taky.','2':'Doplň JEDNO slovo: předložku, člen, spojku, zájmeno nebo pomocné sloveso.','3':'Vytvoř správný tvar ze slova v rámečku. Jde o zápor? Množné číslo? Příslovce?','4':'Doplň 3–6 slov včetně klíčového slova, které NEMĚNÍŠ. Stažený tvar (didn\'t) se počítá jako 2 slova.','mix':'10 minut, otázky ze všech čtyř částí. Kolik jich dáš?','chyby':'Otázky, které jsi spletl. Když je dáš správně, zmizí.'};
+const allIds=k=>C['p'+k].map((_,i)=>`p${k}-${i}`);
+const itemOf=id=>{const m=id.match(/^p(\d)-(\d+)$/);return {id,k:+m[1],x:C['p'+m[1]][+m[2]]}};
+let optKeys=null;
+document.addEventListener('keydown',e=>{if(!optKeys||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;const n='1234abcd'.indexOf(e.key.toLowerCase());if(n>=0)optKeys(n%4)});
+R.uoe={init(root){
+  root.innerHTML=head('Use of English','Části 1–4 z papíru Reading & Use of English. Kola po 8 otázkách (Part 4 po 6) a u každé hned vidíš proč.');
+  this.s=subnav(root,[['1','Part 1 · výběr'],['2','Part 2 · 1 slovo'],['3','Part 3 · tvoření slov'],['4','Part 4 · transformace'],['mix','⏱ Mix 10 min'],['chyby','Chyby <span id="nwrong"></span>']],(k,a)=>uoeStart(k,a));
+  this.s.pick('1');
+ },sub(k){this.s.pick(k)}};
+function uoeStart(kind,area){
+  optKeys=null;let ids;
+  if(kind==='mix')ids=shuffle([1,2,3,4].flatMap(allIds));
+  else if(kind==='chyby'){ids=shuffle(S.wrong.filter(x=>/^p[1-4]-\d+$/.test(x)));if(!ids.length){area.innerHTML='<div class="card"><p>Žádné chyby k opakování. 💪 Dej si kolo z některé části, co spleteš, objeví se tady.</p></div>';return}}
+  else ids=shuffle(allIds(kind)).slice(0,kind==='4'?6:8);
+  const R0={kind,ids,i:0,ok:0,miss:[],area};
+  area.innerHTML=`<div class="card"><div class="rhead"><span class="stat" id="rprog"></span>${kind==='mix'?'<span id="mixt"></span>':''}</div><p class="hint">${esc(UOE_INFO[kind]||'')}</p><div id="ritem" class="stack"></div></div>`;
+  if(kind==='mix'){R0.t=timer($('#mixt',area),600,'',()=>uoeEnd(R0));R0.t.start()}
+  uoeItem(R0);
+}
+function uoeItem(R0){
+  if(R0.ended)return;
+  if(R0.i>=R0.ids.length){uoeEnd(R0);return}
+  const it=itemOf(R0.ids[R0.i]),x=it.x,box=$('#ritem',R0.area),key='uoe'+it.k;
+  $('#rprog',R0.area).textContent=R0.kind==='mix'?`Mix · správně ${R0.ok} z ${R0.i}`:`Otázka ${R0.i+1}/${R0.ids.length} · správně ${R0.ok}`;
+  const gapIn='<input class="gapin" id="ans" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Doplň mezeru">';
+  let html=`<span class="ptag">Part ${it.k}${R0.kind==='mix'||R0.kind==='chyby'?' · '+['','výběr','1 slovo','tvoření slov','transformace'][it.k]:''}</span>`,order;
+  if(it.k===1){order=shuffle([0,1,2,3]);html+=`<p class="q" lang="en">${esc(x[0]).replace('___','<span class="gap">?</span>')}</p><div class="opts">${order.map((o,j)=>`<button type="button" class="opt" data-o="${o}"><b>${L[j]}</b><span lang="en">${esc(x[1][o])}</span></button>`).join('')}</div>`}
+  else if(it.k===2)html+=`<p class="q" lang="en">${esc(x[0]).replace('___',gapIn)}</p>`;
+  else if(it.k===3)html+=`<p><span class="stem">${esc(x[1])}</span></p><p class="q" lang="en">${esc(x[0]).replace('___',gapIn)}</p>`;
+  else html+=`<p class="q" lang="en">${esc(x[0])}</p><p><span class="kw">${esc(x[1])}</span></p><p class="q" lang="en">${esc(x[2])} <span class="gap">?</span> ${esc(x[3])}</p><input class="wide" id="ans" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="3–6 slov včetně ${esc(x[1])}" aria-label="Doplň 3 až 6 slov">`;
+  if(it.k!==1)html+='<div class="row-b"><button type="button" class="main" id="chk">Zkontrolovat</button><button type="button" id="idk">Nevím</button></div>';
+  html+='<div class="fb" id="fb" aria-live="polite"></div>';
+  box.innerHTML=html;
+  let done=false;
+  const right=it.k===1?x[1][x[2]]:it.k===2?x[1].join(' / '):it.k===3?x[2].join(' / '):x[4][0];
+  const note=it.k===1?x[3]:it.k===2?x[2]:it.k===3?x[3]:x[5];
+  const fin=(ok,given,extra)=>{
+    if(done||R0.ended)return;done=true;optKeys=null;
+    score(key,ok,it.id);if(ok)R0.ok++;else R0.miss.push({it,right});
+    $$('input,button',box).forEach(e=>e.disabled=true);
+    const fb=$('#fb',box);fb.className='fb '+(ok?'ok':'no');
+    const alts=it.k===4&&x[4].length>1?`<div class="note">Uznává se taky: <span lang="en">${x[4].slice(1,4).map(esc).join(' · ')}</span></div>`:'';
+    fb.innerHTML=`<div>${ok?'<b>Správně!</b> +10 XP':'<b>Vedle.</b> Správně: <span class="ans" lang="en">'+esc(right)+'</span>'}</div><div class="note">${esc(note)}</div>${ok?'':alts}${extra||''}${!ok&&it.k===4&&given?'<div class="row-b"><button type="button" class="sm" id="acc">Měl jsem to dobře, uznat</button></div>':''}<div class="row-b"><button type="button" class="main" id="nx">Další →</button></div>`;
+    const nx=$('#nx',box);nx.onclick=()=>{R0.i++;uoeItem(R0);const a=$('#ans',R0.area);if(a)a.focus({preventScroll:true});const ri=$('#ritem',R0.area)||R0.area.firstElementChild;if(ri)ri.scrollIntoView({block:'nearest'})};
+    nx.focus({preventScroll:true});fb.scrollIntoView({block:'nearest'});
+    const ac=$('#acc',box);if(ac)ac.onclick=()=>{accept(key,it.id);R0.ok++;R0.miss.pop();fb.className='fb ok';ac.parentElement.remove();fb.firstElementChild.innerHTML='<b>Uznáno.</b> +10 XP'};
+  };
+  if(it.k===1){
+    const bs=$$('.opt',box);
+    const choose=b=>{const good=+b.dataset.o===x[2];bs.forEach(o=>{if(+o.dataset.o===x[2])o.classList.add('right');else if(o===b)o.classList.add('bad')});fin(good)};
+    bs.forEach(b=>b.onclick=()=>choose(b));optKeys=n=>bs[n]&&!done&&choose(bs[n]);
+  }else{
+    const inp=$('#ans',box);
+    const check=()=>{const v=inp.value;if(!v.trim()){inp.focus();return}
+      let u=norm(v),ok,extra='';
+      if(it.k===4){const b=norm(x[2]),a=norm(x[3]);if(b&&u.startsWith(b+' '))u=u.slice(b.length+1);if(a&&u.endsWith(' '+a))u=u.slice(0,-a.length-1);
+        ok=x[4].some(s=>norm(s)===u);
+        if(!ok){const n=u.split(' ').length+(u.match(/n't|'(s|re|ve|ll|m)\b/g)||[]).length,kw=norm(x[1]),hasKw=(' '+u+' ').includes(' '+kw+' ')||u.includes(kw);
+          extra=`<div class="note">Tvoje odpověď: „<span lang="en">${esc(v)}</span>“ · ${n} slov${n<3||n>6?' (musí být 3–6!)':''}${hasKw?'':' · chybí klíčové slovo '+esc(x[1])}</div>`}}
+      else ok=(it.k===2?x[1]:x[2]).some(s=>norm(s)===u);
+      if(!ok&&it.k!==4)extra=`<div class="note">Tvoje odpověď: „<span lang="en">${esc(v)}</span>“</div>`;
+      fin(ok,v,extra)};
+    $('#chk',box).onclick=check;$('#idk',box).onclick=()=>fin(false,'');
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();check()}});
+  }
+}
+function uoeEnd(R0){
+  if(R0.ended)return;R0.ended=true;optKeys=null;if(R0.t)R0.t.stop();
+  const n=R0.ok+R0.miss.length;
+  const card=$('#ritem',R0.area).parentElement;
+  card.innerHTML=`<div class="rhead"><h3>${R0.kind==='mix'?'Čas! ':''}${R0.ok}/${n} správně</h3><span class="stat">+${R0.ok*10} XP</span></div>
+   ${R0.miss.length?`<p class="hint">Tohle si projdi (je to v Chybách):</p><ul class="plan">${R0.miss.map(({it,right})=>`<li><span lang="en">${esc(it.k===4?it.x[0]+' → '+it.x[2]+' … '+it.x[3]:it.x[0])}</span><br><b class="ok" lang="en">${esc(right)}</b></li>`).join('')}</ul>`:'<p>Bez chyby! 🔥</p>'}
+   <div class="row-b"><button type="button" class="main" id="again">Další kolo</button>${R0.miss.length?'<button type="button" id="gochyby">Opakovat chyby</button>':''}</div>`;
+  $('#again',card).onclick=()=>R.uoe.sub(R0.kind);
+  const gc=$('#gochyby',card);if(gc)gc.onclick=()=>R.uoe.sub('chyby');
+  hud();
+}
+
+/* ================= READING ================= */
+const READ_T={'5':15,'6':10,'7':13,'8':13};
+R.reading={init(root){
+  root.innerHTML=head('Reading','Části 5–8 z papíru Reading & Use of English. Celý text najednou jako v testu, vyhodnotíš na konci. Čas je jen orientační, ať víš, jestli stíháš.');
+  this.s=subnav(root,[['5','Part 5 · otázky k textu'],['6','Part 6 · 4 autoři'],['7','Part 7 · odstavce'],['8','Part 8 · přiřazování']],(k,a)=>readPart(k,a));
+  this.s.pick('5');
+ },sub(k){this.s.pick(k)}};
+function readPart(k,area){
+  let body='',qs,labels=null;const top=`<div class="rhead"><span class="ptag">Part ${k} · v testu ~${READ_T[k]} min</span><span id="rtm"></span></div>`;
+  if(k==='5'){const d=C.r5;qs=d.qs;
+    body=`<p class="hint">Nejdřív si přečti otázku, pak najdi místo v textu. Otázky jdou popořadě s textem.</p><article class="paper" lang="en"><h3>${esc(d.title)}</h3>${d.text.map(p=>`<p>${esc(p)}</p>`).join('')}</article>${mcqHTML(qs)}`}
+  else if(k==='6'||k==='8'){const d=C['r'+k];qs=d.qs.map(q=>[k==='8'?'Which person '+q[0]:q[0],null,q[1],q[2]]);labels=d.texts.map(t=>k==='8'?t[1].split(',')[0]:'');
+    body=`<p class="hint">${k==='6'?'Pro každé téma si poznač, co si myslí každý autor (+ / −). Pak se otázky řeší skoro samy.':'Nejdřív si přečti otázky, pak skenuj texty a hledej parafráze.'}</p><article class="paper" lang="en"><h3>${esc(d.title)}</h3><p><i>${esc(d.intro)}</i></p>${d.texts.map(t=>`<div><h4>${t[0]}${k==='8'?' · '+esc(t[1]):''}</h4><p>${esc(k==='8'?t[2]:t[1])}</p></div>`).join('')}</article>${mcqHTML(qs,labels)}`}
+  else{const d=C.r7;
+    body=`<p class="hint">Z textu vypadlo 5 odstavců. Vyber, který patří do každé mezery. Jeden odstavec je navíc. Vybraný odstavec se ti ukáže přímo v textu.</p>
+     <details open><summary>Odstavce A–F</summary><div class="optlist">${d.opts.map(o=>`<div class="paper" lang="en"><b>${o[0]}</b> ${esc(o[1])}</div>`).join('')}</div></details>
+     <article class="paper" lang="en"><h3>${esc(d.title)}</h3>${d.paras.map((p,i)=>`<p>${esc(p)}</p>`+(i<d.ans.length?`<div class="slot" data-g="${i}"><label>Mezera ${i+1} <select data-g="${i}" aria-label="Mezera ${i+1}"><option value="">–</option>${d.opts.map((o,j)=>`<option value="${j}">${o[0]}</option>`).join('')}</select></label><div class="prev"></div><div class="why"></div></div>`:'')).join('')}</article>`}
+  area.innerHTML=`<div class="card">${top}${body}<div class="row-b"><button type="button" class="main" id="rchk">Vyhodnotit</button><button type="button" id="rre">Znovu</button></div><div class="fb" id="rfb" aria-live="polite"></div></div>`;
+  timer($('#rtm',area),READ_T[k]*60,'');
+  $('#rre',area).onclick=()=>readPart(k,area);
+  if(k==='7'){const d=C.r7;
+    $$('select',area).forEach(s=>s.onchange=()=>{const pv=$('.prev',s.closest('.slot'));pv.textContent=s.value?d.opts[+s.value][1]:''});
+    let warned=false;
+    $('#rchk',area).onclick=e=>{const sels=$$('select',area),vals=sels.map(s=>s.value),fb=$('#rfb',area);
+      if(!warned&&(vals.includes('')||new Set(vals).size<vals.length)){warned=true;fb.className='fb info';fb.textContent=vals.includes('')?'Některá mezera je prázdná. Klikni znovu na Vyhodnotit, jestli to chceš vyhodnotit i tak.':'Jedno písmeno máš dvakrát. Každý odstavec patří jen do jedné mezery. Klikni znovu, jestli to chceš vyhodnotit i tak.';return}
+      let ok=0;sels.forEach((s,i)=>{const good=s.value!==''&&+s.value===d.ans[i];s.disabled=true;const sl=s.closest('.slot');sl.classList.add(good?'right':'bad');const w=$('.why',sl);w.className='why show';w.textContent=(good?'✔ ':'✖ Správně '+L[d.ans[i]]+'. ')+d.why[i];if(good)ok++;score('r7',good)});
+      e.target.disabled=true;fb.className='fb '+(ok>=4?'ok':'no');fb.textContent=`${ok}/${d.ans.length} správně. V testu je to ${ok*2} bodů z ${d.ans.length*2}.`};
+    return;
+  }
+  let warned=false;
+  $('#rchk',area).onclick=e=>{const fb=$('#rfb',area),u=unanswered(area);
+    if(u&&!warned){warned=true;fb.className='fb info';fb.textContent=`Chybí ti ${u} odpověď(i). V testu vždycky tipni! Klikni znovu na Vyhodnotit, jestli to chceš vyhodnotit i tak.`;return}
+    const ok=checkMCQ(area,qs,'r'+k);e.target.disabled=true;fb.className='fb '+(ok>=qs.length*.66?'ok':'no');fb.textContent=`${ok}/${qs.length} správně.`};
+}
+
+/* ================= LISTENING ================= */
+const TTS={ok:'speechSynthesis' in window,voices:[],rate:1,run:null,
+  load(){if(!this.ok)return;const bad=/Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Junior|Ralph|Fred|Kathy|Grandma|Grandpa|Rocko|Shelley|Flo|Eddy|Reed|Sandy|Novelty/i;
+    const pref=['Daniel','Serena','Kate','Arthur','Martha','Oliver','Stephanie','Google UK English Female','Google UK English Male','Libby','Ryan','Sonia','Samantha','Karen','Moira','Tessa','Rishi','Alex','Google US English','Aria','Guy'];
+    const sc=v=>{let s=/GB/i.test(v.lang)?0:100;const i=pref.findIndex(p=>v.name.includes(p));s+=i<0?50:i;if(/enhanced|premium|neural|natural/i.test(v.name))s-=30;return s};
+    this.voices=speechSynthesis.getVoices().filter(v=>/^en([-_]|$)/i.test(v.lang)&&!bad.test(v.name)).sort((a,b)=>sc(a)-sc(b));
+    if(this.onload)this.onload()},
+  voice(i){const v=this.voices;if(!v.length)return null;const k=S.voice&&S.voice[i]!=null?S.voice[i]:i;return v[k]||v[i%v.length]},
+  stop(){if(this.ok&&(this.run||speechSynthesis.speaking))speechSynthesis.cancel();if(this.run&&this.run.done)this.run.done();this.run=null},
+  play(lines,onDone){ // lines: [voice, text, pitch]
+    if(!this.ok)return;this.stop();const q=[];
+    lines.forEach(([vi,t,p])=>{const parts=t.match(/[^.!?]+[.!?]+["”’']?\s*|[^.!?]+$/g)||[t];parts.forEach((s,si)=>q.push({vi,t:s.trim(),p:p||1,gap:si===parts.length-1?500:40}))});
+    const run={i:0,done:onDone};this.run=run;
+    const next=()=>{if(this.run!==run)return;if(run.i>=q.length){this.run=null;onDone&&onDone();return}
+      const it=q[run.i++],u=new SpeechSynthesisUtterance(it.t),v=this.voice(it.vi);
+      if(v){u.voice=v;u.lang=v.lang}else u.lang='en-GB';u.rate=this.rate;u.pitch=it.p;
+      let f=false;const nx=()=>{if(f)return;f=true;setTimeout(next,it.gap)};u.onend=nx;u.onerror=nx;speechSynthesis.speak(u)};
+    next();}};
+if(TTS.ok){TTS.load();speechSynthesis.addEventListener?speechSynthesis.addEventListener('voiceschanged',()=>TTS.load()):(speechSynthesis.onvoiceschanged=()=>TTS.load())}
+function voiceBar(host){
+  const draw=()=>{
+    if(!TTS.ok){host.innerHTML='<p class="hint">Tenhle prohlížeč neumí číst nahlas. Otevři stránku v Safari nebo Chrome.</p>';return}
+    if(!TTS.voices.length){host.innerHTML='<p class="hint">Načítám anglické hlasy… Když se nic neobjeví, přidej si v nastavení telefonu anglický hlas (Usnadnění → Mluvený obsah → Hlasy).</p>';return}
+    const o=sel=>TTS.voices.map((v,i)=>`<option value="${i}"${TTS.voices.indexOf(TTS.voice(sel))===i?' selected':''}>${esc(v.name)} (${esc(v.lang)})</option>`).join('');
+    host.innerHTML=`<div class="row-b"><label class="lbl" style="flex:1 1 200px">Hlas 1<select data-v="0">${o(0)}</select></label><label class="lbl" style="flex:1 1 200px">Hlas 2<select data-v="1">${o(1)}</select></label><label class="lbl">Rychlost<select id="vrate"><option value="0.85">pomalu</option><option value="0.95">trochu pomaleji</option><option value="1" selected>normálně</option><option value="1.1">rychleji</option></select></label><button type="button" class="sm" id="vtest" style="align-self:flex-end">🔊 Test</button></div><p class="hint">Nejlíp zní britské hlasy (en-GB), třeba Daniel nebo Serena. Hlas 1 a 2 vyber různé, ať poznáš mluvčí.</p>`;
+    $$('select[data-v]',host).forEach(s=>s.onchange=()=>{S.voice=S.voice||[0,1];S.voice[+s.dataset.v]=+s.value;save()});
+    $('#vrate',host).value=String(TTS.rate);$('#vrate',host).onchange=e=>TTS.rate=+e.target.value;
+    $('#vtest',host).onclick=()=>TTS.play([[0,'Hello, this is voice one.'],[1,'And this is voice two. Good luck on Friday!']]);
+  };
+  TTS.onload=draw;draw();
+}
+function player(host,lines){
+  let n=0;host.innerHTML=`<div class="row-b"><button type="button" class="main pl">▶ Pustit</button><button type="button" class="st">■ Stop</button><span class="stat cnt">poslech 0/2</span></div>`;
+  const pl=$('.pl',host),cnt=$('.cnt',host);
+  pl.onclick=()=>{if(!TTS.ok||!TTS.voices.length){cnt.textContent='bez anglického hlasu to nepůjde';return}n++;cnt.textContent=`poslech ${n}/2${n>2?' (v testu už navíc)':''}`;pl.textContent='🔊 Hraje…';pl.disabled=true;TTS.play(lines,()=>{pl.textContent='▶ Pustit znovu';pl.disabled=false})};
+  $('.st',host).onclick=()=>TTS.stop();
+}
+const transcript=(lines,names)=>`<details class="tr"><summary>Přepis nahrávky</summary><div class="paper" lang="en">${lines.map(([v,t])=>`<p>${names?`<b>${esc(names[v]||'')}</b> `:''}${esc(t)}</p>`).join('')}</div></details>`;
+R.listening={init(root){
+  root.innerHTML=head('Listening','Nahrávky čte nahlas hlas v prohlížeči. V testu slyšíš každou nahrávku dvakrát, tady to hlídá počítadlo. Přepis se odemkne až po vyhodnocení.')+'<div class="card" id="vbar"></div>';
+  voiceBar($('#vbar',root));
+  this.s=subnav(root,[['1','Part 1 · 3 úryvky'],['2','Part 2 · doplň věty'],['3','Part 3 · rozhovor'],['4','Part 4 · 5 mluvčích']],(k,a)=>listenPart(k,a));
+  this.s.pick('1');
+ },sub(k){this.s.pick(k)}};
+function listenPart(k,area){
+  const names2=['Woman:','Man:'];
+  if(k==='1'){
+    const all=C.l1.flatMap(e=>e.qs);
+    area.innerHTML=`<div class="card"><span class="ptag">Part 1 · 3 úryvky × 2 otázky</span><p class="hint">Před poslechem si přečti obě otázky. Odpovědi bývají v názorech a postojích, ne ve faktech.</p>${C.l1.map((e,i)=>`<div class="stack"><h3 lang="en">${esc(e.title)}</h3><div class="pl" data-e="${i}"></div><div class="mq" data-e="${i}">${mcqHTML(e.qs)}</div><div class="trw" data-e="${i}"></div></div>`).join('<hr style="border:0;border-top:2px solid var(--edge);width:100%">')}<div class="row-b"><button type="button" class="main" id="lchk">Vyhodnotit</button><button type="button" id="lre">Znovu</button></div><div class="fb" id="lfb"></div></div>`;
+    C.l1.forEach((e,i)=>player($(`.pl[data-e="${i}"]`,area),e.script.map(([v,t])=>[v,t])));
+    $('#lre',area).onclick=()=>{TTS.stop();listenPart(k,area)};
+    $('#lchk',area).onclick=e=>{TTS.stop();let ok=0;C.l1.forEach((x,i)=>{ok+=checkMCQ($(`.mq[data-e="${i}"]`,area),x.qs,'l1');$(`.trw[data-e="${i}"]`,area).innerHTML=transcript(x.script,x.script.length>1?names2:null)});e.target.disabled=true;const fb=$('#lfb',area);fb.className='fb '+(ok>=4?'ok':'no');fb.textContent=`${ok}/${all.length} správně.`};
+  }else if(k==='2'){
+    const d=C.l2;
+    area.innerHTML=`<div class="card"><span class="ptag">Part 2 · doplň věty</span><h3 lang="en">${esc(d.title)}</h3><p class="hint">Do každé mezery 1–3 slova přesně tak, jak zazní. Přečti si věty předem a odhadni, jaký druh slova chybí (číslo? podstatné jméno?).</p><div class="pl"></div>
+     <ol class="qs">${d.gaps.map((g,i)=>`<li><p class="q" lang="en">${esc(g[0])} <input class="gapin" data-i="${i}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Mezera ${i+1}"> ${esc(g[1])}</p><div class="why"></div></li>`).join('')}</ol>
+     <div class="row-b"><button type="button" class="main" id="lchk">Vyhodnotit</button><button type="button" id="lre">Znovu</button></div><div class="fb" id="lfb"></div><div class="trw"></div></div>`;
+    player($('.pl',area),d.script);
+    $('#lre',area).onclick=()=>{TTS.stop();listenPart(k,area)};
+    $('#lchk',area).onclick=e=>{TTS.stop();let ok=0;$$('input[data-i]',area).forEach(inp=>{const g=d.gaps[+inp.dataset.i],good=g[2].some(a=>norm(a)===norm(inp.value)||norm(inp.value).replace(/^(a|the) /,'')===norm(a));inp.disabled=true;inp.style.borderColor=good?'var(--ok)':'var(--r)';const w=$('.why',inp.closest('li'));w.className='why show '+(good?'okc':'noc');w.textContent=good?'✔':'✖ '+g[2][0];if(good)ok++;score('l2',good)});
+      e.target.disabled=true;const fb=$('#lfb',area);fb.className='fb '+(ok>=5?'ok':'no');fb.textContent=`${ok}/${d.gaps.length} správně. Pravopis se v testu počítá!`;$('.trw',area).innerHTML=transcript(d.script)};
+  }else if(k==='3'){
+    const d=C.l3;
+    area.innerHTML=`<div class="card"><span class="ptag">Part 3 · rozhovor</span><h3 lang="en">${esc(d.title)}</h3><p class="hint">Otázky jdou popořadě s rozhovorem. Správná odpověď je skoro vždy parafráze, ne stejná slova.</p><div class="pl"></div>${mcqHTML(d.qs)}<div class="row-b"><button type="button" class="main" id="lchk">Vyhodnotit</button><button type="button" id="lre">Znovu</button></div><div class="fb" id="lfb"></div><div class="trw"></div></div>`;
+    player($('.pl',area),d.script);
+    $('#lre',area).onclick=()=>{TTS.stop();listenPart(k,area)};
+    $('#lchk',area).onclick=e=>{TTS.stop();const ok=checkMCQ(area,d.qs,'l3');e.target.disabled=true;const fb=$('#lfb',area);fb.className='fb '+(ok>=3?'ok':'no');fb.textContent=`${ok}/${d.qs.length} správně.`;$('.trw',area).innerHTML=transcript(d.script,['Interviewer:','James:'])};
+  }else{
+    const d=C.l4,nums=['one','two','three','four','five'],pitch=[1,1,1.12,.9,.95];
+    const lines=d.speakers.flatMap((t,i)=>[[2,`Speaker ${nums[i]}.`],[i%2,t,pitch[i]]]);
+    const sel=(task,i)=>`<select data-t="${task}" data-i="${i}" aria-label="Mluvčí ${i+1}, úkol ${task}"><option value="">–</option>${(task===1?d.task1:d.task2).map((_,j)=>`<option value="${j}">${L[j]}</option>`).join('')}</select>`;
+    area.innerHTML=`<div class="card"><span class="ptag">Part 4 · 5 mluvčích, 2 úkoly</span><h3 lang="en">${esc(d.title)}</h3><p class="hint">Při 1. poslechu řeš úkol 1, při 2. poslechu úkol 2. Z každého seznamu zbydou 3 možnosti navíc.</p><div class="pl"></div>
+     <div class="genres"><div class="genre" lang="en"><h3>Task 1</h3><p class="hint">Why did the speaker take up the hobby?</p><ol type="A">${d.task1.map(t=>`<li>${esc(t)}</li>`).join('')}</ol></div><div class="genre" lang="en"><h3>Task 2</h3><p class="hint">What has the speaker gained from it?</p><ol type="A">${d.task2.map(t=>`<li>${esc(t)}</li>`).join('')}</ol></div></div>
+     <div class="stack">${d.speakers.map((_,i)=>`<div class="prow" style="grid-template-columns:auto minmax(0,1fr)"><span class="pnum">${i+1}</span><div class="row-b"><label>Task 1 ${sel(1,i)}</label><label>Task 2 ${sel(2,i)}</label><span class="why" data-w="${i}"></span></div></div>`).join('')}</div>
+     <div class="row-b"><button type="button" class="main" id="lchk">Vyhodnotit</button><button type="button" id="lre">Znovu</button></div><div class="fb" id="lfb"></div><div class="trw"></div></div>`;
+    player($('.pl',area),lines);
+    $('#lre',area).onclick=()=>{TTS.stop();listenPart(k,area)};
+    $('#lchk',area).onclick=e=>{TTS.stop();let ok=0;d.speakers.forEach((_,i)=>{const s1=$(`select[data-t="1"][data-i="${i}"]`,area),s2=$(`select[data-t="2"][data-i="${i}"]`,area);
+      const g1=s1.value!==''&&+s1.value===d.ans1[i],g2=s2.value!==''&&+s2.value===d.ans2[i];[s1,s2].forEach(s=>s.disabled=true);s1.style.borderColor=g1?'var(--ok)':'var(--r)';s2.style.borderColor=g2?'var(--ok)':'var(--r)';
+      const w=$(`[data-w="${i}"]`,area);w.className='why show '+(g1&&g2?'okc':'noc');w.textContent=`Správně: ${L[d.ans1[i]]} a ${L[d.ans2[i]]}`;ok+=g1+g2;score('l4',g1);score('l4',g2)});
+      e.target.disabled=true;const fb=$('#lfb',area);fb.className='fb '+(ok>=7?'ok':'no');fb.textContent=`${ok}/10 správně.`;$('.trw',area).innerHTML=transcript(d.speakers.map((t,i)=>[i,t]),['Speaker 1:','Speaker 2:','Speaker 3:','Speaker 4:','Speaker 5:'])};
+  }
+}
+
+/* ================= SPEAKING ================= */
+const SP={};
+R.speaking={init(root){
+  root.innerHTML=head('Speaking','15 minut ve dvojici, 4 části. Mluv nahlas a nahraj se. Při poslechu uslyšíš, kde se zasekáváš a co opakuješ. Partnera nemáš, tak v Part 3 mluv za oba.')+'<div class="card" id="rec"></div>';
+  recorder($('#rec',root));
+  this.s=subnav(root,[['1','Part 1 · rozhovor'],['2','Part 2 · obrázky'],['3','Part 3 · spolupráce'],['4','Part 4 · diskuse'],['fraze','Fráze']],(k,a)=>SP[k](a));
+  this.s.pick('1');
+ },sub(k){this.s.pick(k)}};
+function recorder(host){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){host.innerHTML='<p class="hint">Nahrávání v tomhle prohlížeči nejde. Použij Diktafon v mobilu.</p>';return}
+  host.innerHTML='<div class="row-b"><button type="button" class="main" id="recb">● Nahrát se</button><span class="stat" id="rect">Nahrávka zůstane jen v tomhle okně, nikam se neposílá.</span></div><audio id="reca" controls hidden></audio>';
+  let mr,chunks,stream,tid;const b=$('#recb',host),info=$('#rect',host),au=$('#reca',host);
+  b.onclick=async()=>{
+    if(mr&&mr.state==='recording'){mr.stop();return}
+    try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){info.textContent='Mikrofon není povolený.';return}
+    chunks=[];mr=new MediaRecorder(stream);mr.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+    mr.onstop=()=>{stream.getTracks().forEach(t=>t.stop());clearInterval(tid);if(au.src)URL.revokeObjectURL(au.src);au.src=URL.createObjectURL(new Blob(chunks,{type:mr.mimeType||'audio/mp4'}));au.hidden=false;b.textContent='● Nahrát znovu';info.textContent='Poslechni si to ↓'};
+    mr.start();let s=0;b.textContent='■ Stop';info.textContent='Nahrávám 0:00';tid=setInterval(()=>info.textContent='Nahrávám '+mmss(++s),1000)};
+}
+SP['1']=function(area){
+  const q=pick(C.s1);
+  area.innerHTML=`<div class="card"><span class="ptag">Part 1 · rozhovor · ~2 min</span><p class="bigq" lang="en">${esc(q)}</p><div id="st1"></div><p class="hint">Odpověz 2–3 větami: odpověď → důvod → příklad. Ne jedno slovo a ne dvouminutový monolog.</p><div class="row-b"><button type="button" class="main" id="n1">Další otázka</button></div></div>`;
+  timer($('#st1',area),30,'Odpověď');$('#n1',area).onclick=()=>{stopTimers(area);SP['1'](area)};
+};
+SP['2']=function(area,idx){
+  const i=idx!=null?idx:Math.floor(Math.random()*C.s2.length),d=C.s2[i];
+  area.innerHTML=`<div class="card"><span class="ptag">Part 2 · long turn · 1 min + 30 s</span><h3 lang="en">${esc(d.theme)}</h3>
+   <div class="pics">${d.pics.map((p,j)=>`<div class="pic" lang="en"><span class="em" aria-hidden="true">${p[0]}</span><b>${L[j]}</b>${esc(p[1])}</div>`).join('')}</div>
+   <p class="bigq" lang="en">${esc(d.q)}</p><div id="st2a"></div>
+   <p class="hint">Vyber 2 obrázky. SROVNÁVEJ (whereas, unlike, both…), spekuluj (might, could well, I'd imagine) a odpověz na OBĚ otázky. Popis obrázku body nepřinese.</p>
+   <h3>Pak ty k partnerovi (30 s)</h3><p class="bigq" lang="en">${esc(d.partner)}</p><div id="st2b"></div>
+   <div class="row-b"><button type="button" class="main" id="n2">Další sada</button></div></div>`;
+  timer($('#st2a',area),60,'Tvoje minuta');timer($('#st2b',area),30,'Odpověď');
+  $('#n2',area).onclick=()=>{stopTimers(area);SP['2'](area,(i+1)%C.s2.length)};
+};
+SP['3']=function(area,idx){
+  const i=idx!=null?idx:Math.floor(Math.random()*C.s3.length),d=C.s3[i];
+  area.innerHTML=`<div class="card"><span class="ptag">Part 3 · spolupráce · 2 min + 1 min</span>
+   <div class="spider" lang="en"><div class="c">${esc(d.q)}</div>${d.prompts.map(p=>`<div class="s">${esc(p)}</div>`).join('')}</div>
+   <div id="st3a"></div><p class="hint">Mluv za oba: navrhni bod, zeptej se („What do you think about…?“), reaguj a posuň se dál („Shall we move on to…?“). Nemusíš probrat všech 5 bodů.</p>
+   <h3>Rozhodnutí (1 min)</h3><p class="bigq" lang="en">${esc(d.decide)}</p><div id="st3b"></div>
+   <div class="row-b"><button type="button" class="main" id="n3">Další úkol</button></div></div>`;
+  timer($('#st3a',area),120,'Diskuse');timer($('#st3b',area),60,'Rozhodnutí');
+  $('#n3',area).onclick=()=>{stopTimers(area);SP['3'](area,(i+1)%C.s3.length)};
+};
+SP['4']=function(area){
+  const q=pick(C.s4);
+  area.innerHTML=`<div class="card"><span class="ptag">Part 4 · diskuse · 5 min</span><p class="bigq" lang="en">${esc(q)}</p><div id="st4"></div><p class="hint">Názor → důvod → příklad → druhá strana („Having said that…“). Klidně nesouhlas, jen to zdůvodni.</p><div class="row-b"><button type="button" class="main" id="n4">Další otázka</button></div></div>`;
+  timer($('#st4',area),60,'Odpověď');$('#n4',area).onclick=()=>{stopTimers(area);SP['4'](area)};
+};
+SP.fraze=function(area){
+  area.innerHTML=C.sPhrases.map(([t,ps])=>`<div class="card"><h3>${esc(t)}</h3><div class="phr" lang="en">${ps.map(p=>`<span>${esc(p)}</span>`).join('')}</div></div>`).join('');
+};
+
+/* ================= SLOVÍČKA ================= */
+const V={};
+R.slovicka={init(root){
+  root.innerHTML=head('Slovíčka C1/C2','Jen 56 slov a obratů, které se nejvíc hodí do Writingu a Speakingu. Nešprtej je, zkus jich pár zapojit do textu. Kontrola textu je pozná.');
+  this.s=subnav(root,[['kviz','Kvíz'],['karty','Kartičky'],['seznam','Seznam']],(k,a)=>V[k](a));
+  this.s.pick('kviz');
+ },sub(k){this.s.pick(k)}};
+function blankEx(v){const re=VOCAB_RE.find(x=>x[0]===v[0])[1];re.lastIndex=0;const ex=v[3];const m=re.exec(ex);re.lastIndex=0;return m?esc(ex.slice(0,m.index))+'<span class="gap">?</span>'+esc(ex.slice(m.index+m[0].length)):null}
+V.kviz=function(area){
+  const items=shuffle(C.vocab).slice(0,10);let i=0,ok=0;
+  const step=()=>{
+    if(i>=items.length){area.innerHTML=`<div class="card"><h3>${ok}/${items.length} správně</h3><div class="row-b"><button type="button" class="main" id="va">Další kolo</button></div></div>`;$('#va',area).onclick=()=>V.kviz(area);return}
+    const v=items[i],opts=shuffle([v,...shuffle(C.vocab.filter(x=>x!==v)).slice(0,3)]),bl=blankEx(v);
+    area.innerHTML=`<div class="card"><div class="rhead"><span class="ptag">Kvíz · ${i+1}/${items.length}</span><span class="stat">správně ${ok}</span></div><p class="q" lang="en">${esc(v[2])}</p>${bl?`<p class="q" lang="en" style="font-style:italic">„${bl}“</p>`:''}<div class="opts">${opts.map((o,j)=>`<button type="button" class="opt" data-w="${esc(o[0])}"><b>${L[j]}</b><span lang="en">${esc(o[0])}</span></button>`).join('')}</div><div class="fb" id="vfb"></div></div>`;
+    const bs=$$('.opt',area);
+    bs.forEach(b=>b.onclick=()=>{const good=b.dataset.w===v[0];bs.forEach(o=>{o.disabled=true;if(o.dataset.w===v[0])o.classList.add('right');else if(o===b)o.classList.add('bad')});score('voc',good);if(good)ok++;
+      const fb=$('#vfb',area);fb.className='fb '+(good?'ok':'no');fb.innerHTML=`<div><b lang="en">${esc(v[0])}</b> = ${esc(v[1])} <span class="lv${v[4]===2?' c2':''}">${v[4]===2?'C2':'C1'}</span></div><div class="note" lang="en">${esc(v[3])}</div><div class="row-b"><button type="button" class="main" id="vnx">Další →</button></div>`;
+      const nx=$('#vnx',area);nx.onclick=()=>{i++;step()};nx.focus({preventScroll:true});fb.scrollIntoView({block:'nearest'})});
+  };
+  step();
+};
+V.karty=function(area){
+  let deck=shuffle(C.vocab),known=0;const total=deck.length;
+  const step=()=>{
+    if(!deck.length){area.innerHTML=`<div class="card"><h3>Hotovo, znáš všech ${total}! 🎉</h3><div class="row-b"><button type="button" class="main" id="kr">Znovu</button></div></div>`;$('#kr',area).onclick=()=>V.karty(area);return}
+    const v=deck[0];
+    area.innerHTML=`<div class="card"><div class="rhead"><span class="ptag">Kartičky</span><span class="stat">znám ${known}/${total}</span></div><div class="flash"><span class="lv${v[4]===2?' c2':''}">${v[4]===2?'C2':'C1'}</span><span class="w" lang="en">${esc(v[0])}</span><div id="back" hidden><p class="d"><b>${esc(v[1])}</b> · <span lang="en">${esc(v[2])}</span></p><p class="e" lang="en">${esc(v[3])}</p></div></div>
+     <div class="row-b" id="kf"><button type="button" class="main" id="flip">Otočit</button></div><div class="row-b" id="kb" hidden><button type="button" class="main" id="kn">✔ Znám</button><button type="button" id="kx">Ještě ne</button></div></div>`;
+    $('#flip',area).onclick=()=>{$('#back',area).hidden=false;$('#kf',area).hidden=true;$('#kb',area).hidden=false;$('#kn',area).focus({preventScroll:true})};
+    $('#kn',area).onclick=()=>{deck.shift();known++;step()};
+    $('#kx',area).onclick=()=>{deck.push(deck.shift());step()};
+  };
+  step();
+};
+V.seznam=function(area){
+  area.innerHTML=`<div class="card"><div class="vlist">${C.vocab.map(v=>`<div class="vrow"><span><b lang="en">${esc(v[0])}</b> <span class="lv${v[4]===2?' c2':''}">${v[4]===2?'C2':'C1'}</span></span><span>${esc(v[1])}</span><span class="ex" lang="en">${esc(v[3])}</span></div>`).join('')}</div></div>`;
+};
+
+/* ---------- start ---------- */
+hud();
+show(location.hash.slice(1)||'prehled');
+</script>
+</body></html>
