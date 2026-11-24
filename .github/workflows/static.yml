@@ -40,4 +40,5 @@ jobs:
           path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        # v4 pairs with upload-pages-artifact@v3; v5 stopped finding the artifact on 24 Nov 2026
+        uses: actions/deploy-pages@v4
